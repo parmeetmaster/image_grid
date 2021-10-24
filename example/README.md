@@ -1,16 +1,30 @@
-# image_grid_example
+### Description
 
-Demonstrates how to use the image_grid plugin.
+Image Grid is plugin to select image from. gallery and gamera and set on grid easy to use;
 
-## Getting Started
+**Code Sample**
 
-This project is a starting point for a Flutter application.
+      GridImage(
+                compressImage: true,
+                context: context,
+                onchange: (List<File> files) {
+                  setState(() {
+                    imagecount = files.length;
+                  });
+                },
+                title: "Select Image",
+              ),
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Sample Image](https://github.com/parmeetmaster/image_grid/blob/master/raw/showcase.jpeg?raw=true "Sample Image")
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
+# Editor.md
+
+![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+
+![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
+
