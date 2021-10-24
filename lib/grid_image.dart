@@ -19,7 +19,7 @@ class GridImage extends StatefulWidget {
   String? placeholderImage;
 
   GridImage(
-      {Key? key, required this.context, required this.onchange, this.title,this.compressImage=false,this.placeholderImage})
+      {Key? key, required this.context, required this.onchange, this.title,this.compressImage=false,this.placeholderImage=""})
       : super(key: key);
 
   @override
@@ -45,7 +45,7 @@ class _GridImageState extends State<GridImage> {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Image.asset(
-                widget.placeholderImage!.isEmpty? "assets/camera_group.png":widget.placeholderImage!,
+                widget.placeholderImage!.isEmpty ? "assets/camera_group.png":widget.placeholderImage!,
                 fit: BoxFit.cover,
               ),
             )
