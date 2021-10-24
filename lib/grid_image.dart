@@ -1,6 +1,6 @@
 import 'dart:io';
 
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_support/file_support.dart';
 import 'package:flutter/material.dart';
 import 'package:image_grid/extension.dart';
@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'logs.dart';
+
 class GridImage extends StatefulWidget {
   final BuildContext context;
   final Function(List<File> files) onchange;
@@ -19,7 +20,12 @@ class GridImage extends StatefulWidget {
   String? placeholderImage;
 
   GridImage(
-      {Key? key, required this.context, required this.onchange, this.title,this.compressImage=false,this.placeholderImage=""})
+      {Key? key,
+      required this.context,
+      required this.onchange,
+      this.title,
+      this.compressImage = false,
+      this.placeholderImage = ""})
       : super(key: key);
 
   @override
@@ -44,10 +50,16 @@ class _GridImageState extends State<GridImage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Image.asset(
-                widget.placeholderImage!.isEmpty ? "assets/camera_group.png":widget.placeholderImage!,
-                fit: BoxFit.cover,
-              ),
+              child: widget.placeholderImage!.isEmpty
+                  ? CachedNetworkImage(
+                      imageUrl:
+                          "https://raw.githubusercontent.com/parmeetmaster/image_grid/master/assets/camera_group.png",
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      widget.placeholderImage!,
+                      fit: BoxFit.cover,
+                    ),
             )
           ],
         ),
@@ -114,8 +126,8 @@ class _GridImageState extends State<GridImage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 2.0, right: 4),
-                    child: Image.asset(
-                      "packages/image_grid/assets/remove.png",
+                    child: CachedNetworkImage(imageUrl:
+                      "https://raw.githubusercontent.com/parmeetmaster/image_grid/master/assets/remove.png",
                       height: 20,
                     ),
                   )))
@@ -168,33 +180,27 @@ class _GridImageState extends State<GridImage> {
       res.path.printwtf;
       setState(() {
         images.add(File(res.path));
-        if(widget.compressImage==true) {
+        if (widget.compressImage == true) {
           compressImage(images);
-        }
-        else {
+        } else {
           widget.onchange(images);
         }
       });
     }
   }
 
-  void compressImage(List<File> files)async {
+  void compressImage(List<File> files) async {
     try {
       List<File>? tempimages = [];
       await Future.forEach(files, (e) async {
         print(e);
-        File? file =
-        await FileSupport().compressImage(e as File);
+        File? file = await FileSupport().compressImage(e as File);
         tempimages.add(file!);
       });
       this.images.clear();
-      "${tempimages.length} are compress"
-          .toString()
-          .printwtf;
+      "${tempimages.length} are compress".toString().printwtf;
       this.images.addAll(tempimages);
       widget.onchange(images);
-    } catch (e) {
-    }
-
+    } catch (e) {}
   }
 }
