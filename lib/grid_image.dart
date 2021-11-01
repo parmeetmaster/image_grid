@@ -18,13 +18,21 @@ class GridImage extends StatefulWidget {
   bool compressImage;
 
   String? placeholderImage;
+  List<File>? images;
+
+  String? bottomsheetTitle;
+
+  bool onlyCamera;
 
   GridImage(
       {Key? key,
       required this.context,
       required this.onchange,
+      this.onlyCamera = false,
       this.title,
+      this.bottomsheetTitle = "",
       this.compressImage = false,
+      this.images,
       this.placeholderImage = ""})
       : super(key: key);
 
@@ -34,6 +42,15 @@ class GridImage extends StatefulWidget {
 
 class _GridImageState extends State<GridImage> {
   List<File> images = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.images != null) {
+      images.clear();
+      images.addAll(widget.images!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +143,9 @@ class _GridImageState extends State<GridImage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 2.0, right: 4),
-                    child: CachedNetworkImage(imageUrl:
-                      "https://raw.githubusercontent.com/parmeetmaster/image_grid/master/assets/remove.png",
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          "https://raw.githubusercontent.com/parmeetmaster/image_grid/master/assets/remove.png",
                       height: 20,
                     ),
                   )))
@@ -141,36 +159,54 @@ class _GridImageState extends State<GridImage> {
   ) async {
     PickedFile? res;
     Dialogs.bottomMaterialDialog(
-        title: 'Choose Camera or gallery',
+        title: widget.bottomsheetTitle == null
+            ? 'Choose Camera or gallery'
+            : widget.bottomsheetTitle,
         context: context,
-        actions: [
-          IconsButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              res = (await ImagePicker.platform
-                  .pickImage(source: ImageSource.camera))!;
-              updateImages(res);
-            },
-            text: 'Camera',
-            iconData: Icons.camera_alt,
-            color: Colors.green,
-            textStyle: TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-          IconsButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              res = (await ImagePicker.platform
-                  .pickImage(source: ImageSource.gallery))!;
-              updateImages(res);
-            },
-            text: 'Gallery',
-            iconData: Icons.camera,
-            color: Colors.red,
-            textStyle: TextStyle(color: Colors.white),
-            iconColor: Colors.white,
-          ),
-        ]);
+        actions: widget.onlyCamera == false
+            ? [
+                IconsButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    res = (await ImagePicker.platform
+                        .pickImage(source: ImageSource.camera))!;
+                    updateImages(res);
+                  },
+                  text: 'Camera',
+                  iconData: Icons.camera_alt,
+                  color: Colors.green,
+                  textStyle: TextStyle(color: Colors.white),
+                  iconColor: Colors.white,
+                ),
+                IconsButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    res = (await ImagePicker.platform
+                        .pickImage(source: ImageSource.gallery))!;
+                    updateImages(res);
+                  },
+                  text: 'Gallery',
+                  iconData: Icons.camera,
+                  color: Colors.red,
+                  textStyle: TextStyle(color: Colors.white),
+                  iconColor: Colors.white,
+                ),
+              ]
+            : [
+                IconsButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    res = (await ImagePicker.platform
+                        .pickImage(source: ImageSource.camera))!;
+                    updateImages(res);
+                  },
+                  text: 'Camera',
+                  iconData: Icons.camera_alt,
+                  color: Colors.green,
+                  textStyle: TextStyle(color: Colors.white),
+                  iconColor: Colors.white,
+                ),
+              ]);
   }
 
   void updateImages(PickedFile? res) {

@@ -1,6 +1,6 @@
 name: image_grid
 description: This is project show image grid and with add button to add more images and minus to remove image in grid
-version: 0.0.2+1
+version: 0.0.7+1
 homepage:
 
 environment:
